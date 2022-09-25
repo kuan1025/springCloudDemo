@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: userservice # 服务名称
+  profiles:
+    active: dev #开发环境，这里是dev
+  cloud:
+    nacos:
+      server-addr: localhost:8848 # Nacos地址
+      # server-addr: localhost:80 # 只有搭建Nacos集群（linux）时候，才这么配置
+      config:
+        file-extension: yaml # 文件后缀名
