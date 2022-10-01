@@ -316,7 +316,7 @@ feign:
 這塊看不懂，可以自行搜索maven的jar包引入方式和順序
 
 
-# 八、統一Gateway網關
+# 八、統一Gatewaygateway
 
 ## 8.1 概述
 
@@ -326,11 +326,11 @@ feign:
 * 服務路由、負載均衡
 * 請求限流
 
-在SpringCloud中網關技術包括兩種：gateway和zuul
+在SpringCloud中gateway技術包括兩種：gateway和zuul
 其中Zuul是基於Servlet的實現，属於阻塞式編程，而Gateway則是基於SPring5中提供的WebFlux，属於響應式編程的實現，具備更好的性能。
 
 
-## 8.2 搭建網關服務
+## 8.2 搭建gateway服務
 
 <font color="#35BDB2">**核心程式碼位置：如下圖**</font>
 
@@ -341,8 +341,8 @@ feign:
 * 新建 module
 * 編寫組態檔yml：
   * 註冊進nacos的配置
-  * 網關自身的port號
-  * 網關路由配置
+  * gateway自身的port號
+  * gateway路由配置
 
 ```yaml
 server:
@@ -367,7 +367,7 @@ spring:
 
 除了上面這些，還可以配置路由過濾器。後面會講到。
 
-配置完畢後，啟動你的網關服務和你的user-service和order-service服務，即可通過網關訪問到user-service和order-service
+配置完畢後，啟動你的gateway服務和你的user-service和order-service服務，即可通過gateway訪問到user-service和order-service
 
 **工作原理總結**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/df20e314d2424af8bcc4efb3c551040d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -418,7 +418,7 @@ GatewayFilter可以針對某一類路由標識單獨配置，也可以配置成�
 順序：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/48f6472abd1947a380e8fe44be917a16.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-## 8.4 網關跨域問題處理
+## 8.4 gateway跨域問題處理
 
 域名不一致就是跨域：
 
@@ -461,7 +461,7 @@ spring:
 
 # 九、Docker
 
-Docker命令居多，可以看我下面兩张思维導圖，包含了概念理解和常用命令。
+Docker命令居多，可以看我下面兩張思维導圖，包含了概念理解和常用命令。
 
 ## 9.1 Docker概念
 
