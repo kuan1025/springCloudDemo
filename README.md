@@ -133,7 +133,7 @@ ribbon:
 下載地址：https://github.com/alibaba/nacos/releases
 本文選用1.4.1版本
 
-解壓完成後，cd到nacos的bin目錄下，然後输入命令：
+解壓完成後，cd到nacos的bin目錄下，然後輸入命令：
 ```startup.cmd -m standalone```
 
 關閉的话，如果是linux系統，就運行shutdown.sh即可
@@ -141,8 +141,8 @@ ribbon:
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e8417079376d45f2bbad5d9b5956b360.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 出現如上圖所示界面，說明啟動成功。通過上圖也可知它的預設port是8848（國人做的註冊中心果然不一樣 8848氪金手機~）
 
-输入地址http://127.0.0.1:8848/nacos 即可訪問主頁，用戶名和密碼都是nacos
-![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b5d74b0a898b4575a028a9b594bf0715.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)<font color="#35BDB2">**核心程式碼位置：在 module 01-cloud-demo 下註冊了order-service 和 user-service，同時註解掉了两個 module的Eureka程式碼（包括pom.xml也註解了，畢竟是同類技術）**</font>
+輸入地址http://127.0.0.1:8848/nacos 即可訪問主頁，用戶名和密碼都是nacos
+![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b5d74b0a898b4575a028a9b594bf0715.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)<font color="#35BDB2">**核心程式碼位置：在 module 01-cloud-demo 下註冊了order-service 和 user-service，同時註解掉了兩個 module的Eureka程式碼（包括pom.xml也註解了，畢竟是同類技術）**</font>
 
 **注意**，必須將之前的Eureka程式碼和pom都註解掉，而且把SpringCloud也註解掉（因為已經用了SpringCloudAlibaba），否則有可能報：```APPLICATION FAILED TO START```這個錯誤
 
@@ -184,17 +184,17 @@ userservice:
 配置完成之後，就可以實現同集群優先的 負載均衡了
 
 
-## 6.3 Nacos實現配置熱更新
+## 6.3 Nacos實現配置動態更新
 
-有两種方式，都在程式碼中配置了，具體位置在：
+有兩種方式，都在程式碼中配置了，具體位置在：
 <font color="#35BDB2">**核心程式碼位置：在 module 01-cloud-demo 下 user-service，第一種方式是通過組態檔方式(PatternProperties.java)；第二種方式是通過注解@Value("${yaml裡定義的鍵值對}")的方式**</font>
 
-* **熱更新注意點：**
+* **動態更新注意點：**
   你在Nacos中配置的：
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/820f5805d8a141dd9f8221cbecbdf142.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)你在bootstrap.yaml裡配置的：
-  ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/ad56853609284a6c81b5a39b1dd94912.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)**這两张圖應該是一致的，注意 ```-```和```.```的區別！！！**
+  ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/ad56853609284a6c81b5a39b1dd94912.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)**這兩張圖應該是一致的，注意 ```-```和```.```的區別！！！**
 
-* **熱更新優先級**
+* **動態更新優先級**
   Nacos帶環境的配置 > Nacos不帶環境的配置 > 本地yaml文件配置<br>
   很好理解，Nacos帶環境可以理解為專属化配置(開發環境和生產環境)、肯定優先於Nacos不帶環境的全局配置；本地yaml文件配置則肯定低於Nacos的配置。
 
@@ -203,7 +203,7 @@ userservice:
 
 <font color="#35BDB2">**位置：在 module 01-cloud-demo 下根目錄，有一個叫Nacos集群搭建.md的文件**</font>
 
-**注意點：修改两個組態檔：**
+**注意點：修改兩個組態檔：**
 
 * 修改cluster.conf
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/3216cabcbd0e4331951b0539c31398ea.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -326,7 +326,7 @@ feign:
 * 服務路由、負載均衡
 * 請求限流
 
-在SpringCloud中網關技術包括两種：gateway和zuul
+在SpringCloud中網關技術包括兩種：gateway和zuul
 其中Zuul是基於Servlet的實現，属於阻塞式編程，而Gateway則是基於SPring5中提供的WebFlux，属於響應式編程的實現，具備更好的性能。
 
 
@@ -461,7 +461,7 @@ spring:
 
 # 九、Docker
 
-Docker命令居多，可以看我下面两张思维導圖，包含了概念理解和常用命令。
+Docker命令居多，可以看我下面兩张思维導圖，包含了概念理解和常用命令。
 
 ## 9.1 Docker概念
 
@@ -532,7 +532,7 @@ docker run \
  rabbitmq:3-management
 ```
 
-最後在瀏覽器地址栏输入：```你的port號:15672```
+最後在瀏覽器地址栏輸入：```你的port號:15672```
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c9239f13c1ec4ac987e9fb2cd7ca3825.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 如果看到上圖頁面，就說明成功了！
 
@@ -616,7 +616,7 @@ spring:
 **隊列绑定成功後，打開mq可視化頁面，會看到如下圖所示：**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b0e9c238693d4e258557bc512bfccabf.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**寫好程式碼後，分別啟動生產方，消費方，即可看到調試成功資訊输出：**
+**寫好程式碼後，分別啟動生產方，消費方，即可看到調試成功資訊輸出：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/6eacca917042472b90ab78ad7aaa0dd2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -672,7 +672,7 @@ FanoutQUeue:
 
 寫完程式碼後啟動 consumer 的SpiringBoot主啟動類（報錯資訊不用管），然後進入rabbitMQ可視化控制台，出現下圖則說明配置成功：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/48670dfbf1464952b0733b59fd8da52b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-随後運行發送隊列的Test程式碼，打開 consumer 的控制台，出現如下圖输出，則說明案例測試通過：
+随後運行發送隊列的Test程式碼，打開 consumer 的控制台，出現如下圖輸出，則說明案例測試通過：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a42fceef10944bb89abb48f5b8339491.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -801,7 +801,7 @@ ElasticSearch底層是Lucene（側面說明了ES和Hadoop千丝万缕的關係�
 >
 > -e "discovery.type=single-node"	單點模式運行（區別於集群模式運行）
 >
-> 两個-v參數：資料卷挂載，分別是資料保存目錄(data)，和插件目錄(plugins)
+> 兩個-v參數：資料卷挂載，分別是資料保存目錄(data)，和插件目錄(plugins)
 >
 > --network es-net 將ES容器加入到剛剛創建的docker網络中
 >
@@ -853,7 +853,7 @@ elasticsearch:7.12.1
 <font color=red>先給出ES官方幫助文件地址：</font>
 https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 
-索引庫相當於MySQL中的Table。具體操作有两個：
+索引庫相當於MySQL中的Table。具體操作有兩個：
 
 * Mapping映射属性
 * 索引庫的CRUD
@@ -1518,7 +1518,7 @@ Java程式碼對應結果解析的圖例：
 
 ## 11.10 ES資料補全
 
-比如你在京東输入 sj 這两個字母，搜索框就會猜測出你想输入手機。這個就是資料補全
+比如你在京東輸入 sj 這兩個字母，搜索框就會猜測出你想輸入手機。這個就是資料補全
 
 <font color = green>**安裝資料補全分詞器：**</font>
 

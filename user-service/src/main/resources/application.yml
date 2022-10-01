@@ -7,14 +7,16 @@ spring:
     password: password
     driver-class-name: com.mysql.jdbc.Driver
 
-# 下面註解，因为在bootstrap.yaml里面这些已经重复了。如果你想测试配置集群名称（部署在HZ或者SH），那就打开这段注释，相应地，注释掉bootstrap.yaml里面全部代码
-  application:
-    name: userservice   # user的服务名称
+# 下面註解，因為在bootstrap.yaml裏面這些已聲明。如果想測試組態集合名稱（部署在Taipei或Seoul），那就打開註解，對應到的，註解掉bootstrap.yaml裡面的程式碼
+#  application:
+#    name: userservice   # user的server name
+#    配置nacos
 #  cloud:
 #    nacos:
-#      server-addr: localhost:8848
+#      server-addr: localhost:8848 # 位址
+#     建立集合
 #      discovery:
-#        cluster-name: HZ # 集群名称
+#        cluster-name: Seoul # 集合名稱
 mybatis:
   type-aliases-package: cn.itcast.user.pojo
   configuration:
@@ -22,12 +24,12 @@ mybatis:
 logging:
   level:
     cn.itcast: debug
-pattern:
-  dateformat: MM-dd HH:mm:ss:SSS
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
 
-
-eureka:
-  client:
-    service-url: # eureka 位址  (eureka 本身也是一個微服務 也要註冊自己)
-      defaultZone: http://127.0.0.1:10086/eureka
+# 要用再打開
+#eureka:
+#  client:
+#    service-url: # eureka 位址  (eureka 本身也是一個微服務 也要註冊自己)
+#      defaultZone: http://127.0.0.1:10086/eureka
 

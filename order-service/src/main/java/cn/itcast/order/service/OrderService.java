@@ -50,7 +50,7 @@ public class OrderService {
         // 2.1.2 使用eureka寫法
         String url = "http://userservice/user/" + order.getUserId();
 
-        // 2.2 發http請求,第二个参数是返回類型，可以返回json也可以返回物件
+        // 2.2 發http請求,第二個参数是返回類型，可以返回json也可以返回物件
         User user = restTemplate.getForObject(url, User.class);
         //3、 封装user到Order
         order.setUser(user);
