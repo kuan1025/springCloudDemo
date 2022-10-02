@@ -37,13 +37,23 @@ userservice: # 給指定微服務配置負載均衡規則，這裡是userservice
     NFLoadBalancerRuleClassName: com.alibaba.cloud.nacos.ribbon.NacosRule # 負載均衡規則
 
 
-#ribbon:
-#  eager-load:
-#    enabled: true # 開啟eager load
-#    clients:
-#      - userservice # 指定要以該方式load的server (若沒配置 預設為lazy load)
+ribbon:
+  eager-load:
+    enabled: true # 開啟eager load
+    clients:
+      - userservice # 指定要以該方式load的server (若沒配置 預設為lazy load)
+
+# 用yml配置 feign log, 也可用java config
 #feign:
-#  httpclient:
-#    enabled: true # 支援HttpClient的开关
-#    max-connections: 200 # 最大連接數
-#    max-connections-per-route: 50 # 单个路径的最大連接數
+#  client:
+#    config:
+#      default:
+#        loggerLevel: FULL
+
+
+# 配置 http connection poll
+feign:
+  httpclient:
+    enabled: true # 支援HttpClient
+    max-connections: 200 # 最大連接數
+    max-connections-per-route: 50 # 單一路徑最大連接數

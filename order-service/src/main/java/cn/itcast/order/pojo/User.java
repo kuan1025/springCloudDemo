@@ -1,5 +1,5 @@
-//TODO 全部都注释掉了。因为已经抽取出了公共的jar包：feign-api，抽取的过程见11-Feign-实现Feign最佳实践
-
+//TODO 全部都註解掉。因爲已經取出了公用的jar包：feign-api，取出的過程見11-Feign-實現Feign最佳實踐
+/*
 
 package cn.itcast.order.pojo;
 
@@ -11,3 +11,4 @@ public class User {
     private String username;
     private String address;
 }
+*/

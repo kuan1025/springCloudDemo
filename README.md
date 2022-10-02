@@ -232,9 +232,9 @@ userservice:
 
 ## 7.1 還原事故現場
 
-由於上一章（第六章）做了Nacos集群，但是整個第七章是基於單體的註冊中心。所以要把集群恢複成單體。
+由於上一章（第六章）做了Nacos集群，但是整個第七章是基於單體的註冊中心。所以要把集群恢復成單體。
 
-* nacos不使用集群啟動，恢複你standalone環境，主要是修改組態檔的nacosport
+* nacos不使用集群啟動，恢復你standalone環境，主要是修改組態檔的nacosport
 * 這樣做的目的是讓微服務註冊進註冊中心。你用nacos還原事故現場也行，用eureka還原事故現場也行。反正能還原即可。
 * 打開你的資料庫服務
 
@@ -316,7 +316,7 @@ feign:
 這塊看不懂，可以自行搜索maven的jar包引入方式和順序
 
 
-# 八、統一Gatewaygateway
+# 八、統一Gateway
 
 ## 8.1 概述
 
@@ -844,7 +844,7 @@ elasticsearch:7.12.1
 * **分詞器總結**
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/8ed9d0a5aa2f4ad49d72d39391426043.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-## [Debug] 停止ES容器（或是重启Linux）後，如何恢複Docker網络：
+## [Debug] 停止ES容器（或是重启Linux）後，如何恢復Docker網络：
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b80654a90def4bb7bdf4863391830cd6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
