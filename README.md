@@ -276,7 +276,7 @@ userservice:
 1、引入jar包：
 
 ```xml
-<!--HttpClient依賴-->
+<!--HttpClient－-->
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>

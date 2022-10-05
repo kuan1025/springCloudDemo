@@ -1,0 +1,21 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848 # nacos位址
+    gateway:
+      routes:
+        - id: user-service # router標示，須具有唯一性
+          uri: lb://userservice # router的目標位址 lb就是附載均衡，後面跟著server名稱
+          predicates: # router判斷式，判斷請求是否符合規則
+            - Path=/user/** # 路徑判斷，判斷路徑是否是以/user開頭，如果是則符合規則 有許多規則，自己查API
+            - Before=2022-10-06T21:00:30.433+08:00[Asia/Taipei]
+          #filters:
+#          #  - AddRequestHeader=lbwnb # 这是配置路由过滤器，作用是给每个经过userservice的请求加一个请求头：lbwnb
+        - id: order-service
+          uri: lb://orderservice
+          predicates:
+            - Path=/order/**
