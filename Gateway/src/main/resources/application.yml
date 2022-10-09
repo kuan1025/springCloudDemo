@@ -5,7 +5,8 @@ spring:
     name: gateway
   cloud:
     nacos:
-      server-addr: 127.0.0.1:8848 # nacos位址
+#      server-addr: 127.0.0.1:8848 # 本機部署 nacos位址
+      server-addr: nacos:8848 # nacos位址
     gateway:
       routes:
         - id: user-service # router標示，須具有唯一性
