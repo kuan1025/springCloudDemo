@@ -10,88 +10,111 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalTime;
 import java.util.Map;
 
 @Component
 public class SpringRabbitListener {
 
-    //注释掉简单队列的代码，用的时候可以展开，但是要注释掉其他的代码
-    /*@RabbitListener(queues = "simple.queue")
+    //註釋掉簡單隊列的程式碼，用的時候可以展開，但是要註釋掉其他的程式碼
+    @RabbitListener(queues="simple.queue")
     public void listenSimpleQueue(String msg){
-        System.out.println("消费者已经接受到消息："+msg);
-    }*/
+        System.out.println("receive the message from simple.queue => [ " + msg +" ] ");
+    }
 
-    //----------------WorkQueue开始-----------------
+    //----------------WorkQueue-----------------
+    // 結論 ： 1. 預設情況訊息會被平分，因為preFetch機制，訊息會先被均分(預先取得)，consumer分別做處理
+    //        2. 可以調整prefetch的數量(yml配置)，確保做完才取下一個
+
+
     @RabbitListener(queues = "simple.queue")
     public void listenWorkQueue1(String msg) throws InterruptedException {
-        System.out.println("消费者1已经接受到消息：" + msg);
-        Thread.sleep(20);
+        System.out.println("consumer1接受到訊息： [ " + msg + " ] "+ LocalTime.now());
+        Thread.sleep(20); // 每秒處理50 unit
     }
+
+
 
     @RabbitListener(queues = "simple.queue")
     public void listenWorkQueue2(String msg) throws InterruptedException {
-        System.out.println("消费者2........已经接受到消息：" + msg);
-        Thread.sleep(200);  //这里的速度比消费者1慢
+        System.err.println("consumer2接受到訊息： [ " + msg + " ] "+ LocalTime.now());
+        Thread.sleep(200);   // 每秒處理5 unit
     }
-    //----------------WorkQueue结束-----------------
+    //----------------WorkQueue結束-----------------
 
-    //----------------------FanoutExchange监听侧开始----------------------
+    //----------------------FanoutExchange----------------------
     @RabbitListener(queues = "fanout.queue1")
     public void listenFanoutQueue1(String msg) {
-        System.out.println("消费者1接受到fanoutqueue1消息：" + msg);
+        System.out.println("consumer 接受到fanout.queue1 訊息：" + msg);
     }
 
     @RabbitListener(queues = "fanout.queue2")
     public void listenFanoutQueue2(String msg) {
-        System.out.println("消费者2接受到fanoutqueue2消息：" + msg);
+        System.out.println("consumer 接受到fanout.queue2 訊息：" + msg);
     }
-    //----------------------FanoutExchange监听侧结束----------------------
+    //----------------------FanoutExchange結束----------------------
 
+    //----------------------DirectExchange----------------------
 
-    //----------------------DirectExchange监听侧开始----------------------
-    @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(name = "direct.queue1"),     //监听队列
-            //绑定交换机 交换机名称是 itcast.direct 交换机类型是 direct（Sprng为我们提供了枚举ExchangeTypes,点进去看看就知道了）
-            exchange = @Exchange(name = "itcast.direct", type = ExchangeTypes.DIRECT),
-            key = {"red", "blue"})) //指定两个BindingKey
-    public void listenDirectQueue1(String msg) {
-        System.out.println("消费者接收到direct.queue1的消息：" + msg);
+    /**
+     * 用bean組態建立exchange queue 有點麻煩 ( 參考FanoutConfig.java
+     * 這裡示範 在listener建立上述組件
+     * 順序 1. bind 2. queue 3. exchange 4. 指定key
+     */
+    @RabbitListener(bindings =@QueueBinding(
+            value = @Queue(name = "direct.queue1"),
+            exchange = @Exchange(name="direct.fanout",type = ExchangeTypes.DIRECT),
+            key = {"red","blue"}
+    ) )
+    public void ListenDirectQueue1(String msg){
+        System.out.println("consumer 接受到direct.queue1 訊息：" + msg);
     }
 
-    @RabbitListener(bindings = @QueueBinding(
+    @RabbitListener(bindings =@QueueBinding(
             value = @Queue(name = "direct.queue2"),
-            exchange = @Exchange(name = "itcast.direct", type = ExchangeTypes.DIRECT),
-            key = {"red", "yellow"})) //这里和上面不同，指定了BindingKey为 red 和 yellow
-    public void listenDirectQueue2(String msg) {
-        System.out.println("消费者接收到direct.queue2的消息：" + msg);
+            exchange = @Exchange(name="direct.fanout",type = ExchangeTypes.DIRECT),
+            key = {"red","yellow"}
+    ) )
+    public void ListenDirectQueue2(String msg){
+        System.out.println("consumer 接受到direct.queue2 訊息：" + msg);
     }
-    //----------------------DirectExchange监听侧结束----------------------
 
-    //----------------------TopicExchange监听侧开始----------------------
+
+
+    //----------------------DirectExchange結束----------------------
+
+
+
+
+    //----------------------TopicExchange----------------------
+
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "topic.queue1"),
-            exchange = @Exchange(name = "itcast.topic", type = ExchangeTypes.TOPIC),
-            key = {"china.#"})) //和DirectExchange唯一的区别就是这里支持通配符
+            exchange = @Exchange(name = "topic.fanout",type = ExchangeTypes.TOPIC),
+            key = "Taiwan.#"
+    ) )
     public void listenTopicQueue1(String msg) {
-        System.out.println("消费者接收到topic.queue1的消息：" + msg);
+        System.out.println("consumer topic.queue1 訊息：" + msg);
     }
+
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(name = "topic.queue2"),
-            exchange = @Exchange(name = "itcast.topic", type = ExchangeTypes.TOPIC),
-            key = {"#.news"})) //和DirectExchange唯一的区别就是这里支持通配符
+            exchange = @Exchange(name = "topic.fanout",type = ExchangeTypes.TOPIC),
+            key = "#.news"
+    ) )
     public void listenTopicQueue2(String msg) {
-        System.out.println("消费者接收到topic.queue2的消息：" + msg);
+        System.out.println("consumer topic.queue2 訊息：" + msg);
     }
-    //----------------------TopicExchange监听侧结束----------------------
+    //----------------------TopicExchange結束----------------------
 
 
-    //----------------------监听发过来的json开始----------------------
-    @RabbitListener(queues = "object.queue")
+    //---------------------json----------------------
+    @RabbitListener(queues = "Object.queue")
     public void listenObjectQueue(Map<String, Object> msg) {
-        System.out.println("接收到object.queue消息：" + msg);
+        System.out.println("接收到Object.queue消息：" + msg);
     }
-    //----------------------监听发过来的json结束----------------------
+    //----------------------json結束----------------------
 
 
 }

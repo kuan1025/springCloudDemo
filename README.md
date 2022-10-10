@@ -141,7 +141,7 @@ ribbon:
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e8417079376d45f2bbad5d9b5956b360.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 出現如上圖所示界面，說明啟動成功。通過上圖也可知它的預設port是8848（國人做的註冊中心果然不一樣 8848氪金手機~）
 
-輸入地址http://127.0.0.1:8848/nacos 即可訪問主頁，用戶名和密碼都是nacos
+輸入地址http://127.0.0.1:8848/nacos 即可訪問主頁，使用者名和密碼都是nacos
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b5d74b0a898b4575a028a9b594bf0715.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)<font color="#35BDB2">**核心程式碼位置：在 module 01-cloud-demo 下註冊了order-service 和 user-service，同時註解掉了兩個 module的Eureka程式碼（包括pom.xml也註解了，畢竟是同類技術）**</font>
 
 **注意**，必須將之前的Eureka程式碼和pom都註解掉，而且把SpringCloud也註解掉（因為已經用了SpringCloudAlibaba），否則有可能報：```APPLICATION FAILED TO START```這個錯誤
@@ -227,7 +227,7 @@ userservice:
 <font color="#35BDB2">**核心程式碼位置：如下圖所示：**</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e1853dfb5e9c4a5485114679a3a23621.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2">**order-service會引入上圖的feign-api，實現遠端調用**</font>
+<font color="#35BDB2">**order-service會import 上圖的feign-api，實現遠端調用**</font>
 
 
 ## 7.1 還原事故現場
@@ -238,7 +238,7 @@ userservice:
 * 這樣做的目的是讓微服務註冊進註冊中心。你用nacos還原事故現場也行，用eureka還原事故現場也行。反正能還原即可。
 * 打開你的資料庫服務
 
-**引入feign版本報錯bug問題解决：**
+**import feign版本報錯bug問題解决：**
 我手工指定了一個版本，版本號是：
 
 ```xml
@@ -255,25 +255,25 @@ userservice:
 
 * 組態檔方式：
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/5aaa257c34124aaab2afce888042f5d6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-* 程式碼方式（新建一個配置類）：
+* 程式碼方式（新建一個java config）：
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/2ac0d09d02bd4992a3094feb92032897.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**我們採用的是程式碼方式，並全局生效（新建一個配置類）**
+**我們採用的是程式碼方式，並全局生效（新建一個java config）**
 
-## 7.3 Feign性能優化
+## 7.3 Feign效能優化
 
-底層的客戶端實現是：
+底層的client端實現是：
 
 * URLConnection:預設實現，不支援連線池
 * Apache HttpClient: 支援連線池（常用）
 * OKHttp：支援連線池
 
-第一種方式是預設的，不支援連線池。所以這裡的性能優化指的是：換成第二種方式或者第三種方式。
+第一種方式是預設的，不支援連線池。所以這裡的效能優化指的是：換成第二種方式或者第三種方式。
 
 **其中第二種方式 Apache HttpClient 常用於模擬postman的樣式，發送一個form-data樣式的post請求，也可在這個post請求裡上傳文件。我們也採用的是這種方式**
 
-性能優化步骤：
-1、引入jar包：
+效能優化步骤：
+1、import jar：
 
 ```xml
 <!--HttpClient－-->
@@ -298,22 +298,22 @@ feign:
 
 ## 7.4 Feign最佳實践
 
-打成jar包方式：
+打成jar方式：
 
-[java中的JAR包](https://yuanyu.blog.csdn.net/article/details/87880736)
+[java中的jar](https://yuanyu.blog.csdn.net/article/details/87880736)
 
-**1、在專案中加入單獨的jar包步骤：**
+**1、在專案中加入單獨的jar步骤：**
 
-寫好自己的maven專案後，執行clean package，即可得到一個jar包
+寫好自己的maven專案後，執行clean package，即可得到一個jar
 
-**2、在專案中引入單獨的jar包圖解：**
+**2、在專案中import 單獨的jar圖解：**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/f47ab4999cd64a438feab33e6448c4a0.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-上圖其實是在專案的根目錄創建了一個叫lib的文件夾，裡面存著自定義jar包。然後即可引入。
-**3、針對1和2的補充，有的時候沒必要非得打jar包，可以寫一個子 module引入呀，如下圖所示：**
+上圖其實是在專案的根目錄創建了一個叫lib的文件夾，裡面存著自定義jar。然後即可import 。
+**3、針對1和2的補充，有的時候沒必要非得打jar，可以寫一個子 moduleimport 呀，如下圖所示：**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c70c5c3d414a48bcb6cf25a5e83cdca3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-這塊看不懂，可以自行搜索maven的jar包引入方式和順序
+這塊看不懂，可以自行搜索maven的jarimport 方式和順序
 
 
 # 八、統一Gateway
@@ -323,11 +323,11 @@ feign:
 三大功能：
 
 * 身份認證和權限校驗
-* 服務路由、負載均衡
+* 服務router、負載均衡
 * 請求限流
 
 在SpringCloud中gateway技術包括兩種：gateway和zuul
-其中Zuul是基於Servlet的實現，属於阻塞式編程，而Gateway則是基於SPring5中提供的WebFlux，属於響應式編程的實現，具備更好的性能。
+其中Zuul是基於Servlet的實現，属於阻塞式編程，而Gateway則是基於SPring5中提供的WebFlux，属於響應式編程的實現，具備更好的效能。
 
 
 ## 8.2 搭建gateway服務
@@ -342,7 +342,7 @@ feign:
 * 編寫組態檔yml：
   * 註冊進nacos的配置
   * gateway自身的port號
-  * gateway路由配置
+  * gatewayrouter配置
 
 ```yaml
 server:
@@ -355,9 +355,9 @@ spring:
       server-addr: 127.0.0.1:8848 # nacos地址
     gateway:
       routes:
-        - id: user-service # 路由標識，必須唯一
-          uri: lb://userservice # 路由的目標地址 lb就是負載均衡，後面跟著是server name稱
-          predicates: # 路由斷言，判斷請求是否符合規則
+        - id: user-service # router標識，必須唯一
+          uri: lb://userservice # router的目標地址 lb就是負載均衡，後面跟著是server name稱
+          predicates: # router斷言，判斷請求是否符合規則
             - Path=/user/** # 路徑斷言，判斷路徑是否是以/user開header，如果是則符合規則
         - id: order-service
           uri: lb://orderservice
@@ -365,34 +365,34 @@ spring:
             - Path=/order/**
 ```
 
-除了上面這些，還可以配置路由過濾器。後面會講到。
+除了上面這些，還可以配置router過濾器。後面會講到。
 
 配置完畢後，啟動你的gateway服務和你的user-service和order-service服務，即可通過gateway訪問到user-service和order-service
 
 **工作原理總結**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/df20e314d2424af8bcc4efb3c551040d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-## 8.3 路由過濾
+## 8.3 router過濾
 
-### 8.3.1 斷言工廠：對請求進行過濾
+### 8.3.1 斷言factory：對請求進行過濾
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/4d122d3cf2b440a0a76c16c73f18ef03.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 如果你不會寫匹配表達式，可以去spring官網查：
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c85c9d15bdaa489788bdd07ac6e1e10e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-如果你的請求不符合路由斷言，那你的請求就會被拒绝，返回一個404. 我們可以通過配置路由斷言工廠的方式來過濾某些請求。
+如果你的請求不符合router斷言，那你的請求就會被拒绝，返回一個404. 我們可以通過配置router斷言factory的方式來過濾某些請求。
 
 ### 8.3.2 過濾器GatewayFilter：對請求和響應進行過濾
 
-**它和8.3.1講述的斷言工廠一樣，都配置在yaml裡**
+**它和8.3.1講述的斷言factory一樣，都配置在yaml裡**
 
-* GatewayFilter 和 8.3.1講述的斷言工廠的區別：
+* GatewayFilter 和 8.3.1講述的斷言factory的區別：
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/db954776f58a444286a95d7c146a7820.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-* 與斷言工廠類似，spring也為我們提供了過濾器工廠：
+* 與斷言factory類似，spring也為我們提供了過濾器factory：
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/df41c0072a4b4c67b2224666c1bc73ba.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/bcc775ae0a6c4d7e86e84369fc8b7ea2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-GatewayFilter可以針對某一類路由標識單獨配置，也可以配置成全局配置（所有路由id都生效），具體可自行百度，<font color=red>但是過濾器鏈執行順序有变化，可以看8.8.4详解</font>
+GatewayFilter可以針對某一類router標識單獨配置，也可以配置成全局配置（所有routerid都生效），<font color=red>但是過濾器鏈執行順序有變化，可以看8.8.4详解</font>
 
 
 ### 8.3.3 全局過濾器GlobalFilter：可以自定義過濾邏輯程式碼實現
@@ -403,7 +403,7 @@ GatewayFilter可以針對某一類路由標識單獨配置，也可以配置成�
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c2c2d5168a554df09dfaa51f3c64a7bd.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
-**案例正確執行的效果圖：**
+**範例正確執行的效果圖：**
 不加參數被過濾器攔截：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/d05fa12cb3e941bdb49e7726573b9146.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 加了參數，不被攔截，正確獲得響應！
@@ -473,24 +473,24 @@ Docker命令居多，可以看我下面兩張思维導圖，包含了概念理�
 
 
 
-# 十、MQ(Message Queue)消息隊列
+# 十、MQ(Message Queue)消息queue
 
 ## 10.1 概述
 
 * **事件驅動架構的概念**：
   MQ是事件驅動架構的實現形式，MQ其實就是事件驅動架構的Broker。
 * **非同步應用場景：**
-  如果是傳統软件行业：虽然不需要太高並發，但是涉及到和其它系統做對接，我方系統處理速度(50ms)远快於對方系統處理速度(1-3s)，為了兼顧用戶的體驗，加快單据處理速度，故引入MQ。
-  用戶只用點击我方系統的按鈕，我方按鈕發送到MQ即可給用戶返回處理成功資訊。背後交由對方系統做處理即可。至於處理失败，補償機制就不是用戶體驗要考慮的事情了，這樣可以大大提升用戶體驗。
+  如果是傳統軟體業：雖然不需要太高並發，但是涉及到和其它系統做對接，我方系統處理速度(50ms)遠快於對方系統處理速度(1-3s)，為了兼顧使用者的體驗，加快處理速度，故import MQ。
+  使用者只用點擊我方系統的按鈕，我方按鈕發送到MQ即可給使用者返回處理成功資訊。背後交由對方系統做處理即可。至於處理失敗，補償機制就不是使用者體驗要考慮的事情了，這樣可以大大提升使用者體驗。
 
 * **非同步傳輸優缺點：**
   * **優點：**
     * 耦合度低
-    * 吞吐量提升
+    * 處理量提升
     * 故障隔離
     * 流量削峰
   * **缺點：**
-    *	依賴於MQ的可靠性，安全性，吞吐能力（因為加了一層MQ，當然高度依賴它）
+    *	依賴於MQ的可靠性，安全性，處理能力（因為加了一層MQ，當然高度依賴它）
     *	業務複雜了，業務沒有明顯的流程線，不好追蹤管理
 
 
@@ -508,7 +508,7 @@ Docker命令居多，可以看我下面兩張思维導圖，包含了概念理�
 
 ```shell
 docker run \
- -e RABBITMQ_DEFAULT_USER=root \  #用戶名
+ -e RABBITMQ_DEFAULT_USER=root \  #使用者名
  -e RABBITMQ_DEFAULT_PASS=root \  # 密碼
  --name mq \	
  --hostname mq1 \	# 主機名，將來做集群部署要用
@@ -541,7 +541,7 @@ vitural host：虚擬主機，是對queue、exchange等資源的邏輯分組
 
 ## 10.3 常見消息模型
 
-### 10.3.1 簡單隊列模型
+### 10.3.1 簡單queue模型
 
 <font color="#35BDB2">**核心程式碼位置：下圖所示**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/f72dbed6a94940f1b18ed884d78a751a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -553,9 +553,9 @@ vitural host：虚擬主機，是對queue、exchange等資源的邏輯分組
 
 AMQP（Advanced Message Queuing Protocol），是用於在應用程序之间傳递業務資訊的開放標准，該協議與語言和平台無關，更符合微服務中獨立性的要求
 
-SpringAMQP就是Spring基於AMQP定義的一套API规范。
+SpringAMQP就是Spring基於AMQP定義的一套API规範。
 
-**使用Spring AMQP實現簡單隊列模型步骤：**
+**使用Spring AMQP實現簡單queue模型步骤：**
 
 **以 supplier 為例：**
 
@@ -564,7 +564,7 @@ SpringAMQP就是Spring基於AMQP定義的一套API规范。
 配置如下：
 
 ```yaml
-# 1.1.設置連線參數，分別是：主機名、port號、用戶名、密碼、vhost
+# 1.1.設置連線參數，分別是：主機名、port號、使用者名、密碼、vhost
 spring:
   rabbitmq:
     host: 127.0.0.1
@@ -574,7 +574,7 @@ spring:
     virtual-host: /
 ```
 
-然後編寫測試類，以及測試程式碼,位置如下圖所示：
+然後編寫test class，以及測試程式碼,位置如下圖所示：
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/f3c36a7a22c94e9ebccab16871c44e3e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 ** consumer 一側，和 supplier 類似。不再赘述，如下圖進行配置即可：**
@@ -587,9 +587,9 @@ spring:
 之所以 10.3.2 放在 10.4章，因為demo模型的演示，今後就是以 Spring AMQP為例了
 
 **概述**
-其實就是一個隊列，绑定了多個 consumer ，一條消息只能由一個 consumer 進行消費，預設情况下，每個 consumer 是輪詢消費的。**區別於下文的發布-訂閱模型（該模型允許將同一消息發給多 consumer ）**
+其實就是一個queue，绑定了多個 consumer ，一條消息只能由一個 consumer 進行消費，預設情况下，每個 consumer 是輪詢消費的。**區別於下文的發布-訂閱模型（該模型允許將同一消息發給多 consumer ）**
 
-**案例：**
+**範例：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/598f5466c8e443f29c353bc2f71dfec3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -597,12 +597,12 @@ spring:
 
 **概念**
 允許將同一個消息發給多個 consumer 。
-其實就是加了一層交換機而已，如下圖所示：
+其實就是加了一層exchanger而已，如下圖所示：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c88c35592357458d9b0932bdedfe7cfb.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**交換機類型有很多，下文逐一介绍。下圖表示了各交換機類型的继承關係**
+**exchanger類型有很多，下文逐一介绍。下圖表示了各exchanger類型的繼承關係**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/db1a88a9c42c42b7a035348408b4e21a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**最後，交換機只能做消息的轉發而不是存储，如果將來路由（交換機和消息隊列queue的連線稱作路由）沒有成功，消息會丢失**
+**最後，exchanger只能做消息的轉發而不是存儲，如果將來router（exchanger和消息queuequeue的連線稱作router）沒有成功，消息會丢失**
 
 
 #### A. Fanout Exchange
@@ -613,26 +613,26 @@ spring:
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/27b2105188e34cd886a357f7b109afe4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**隊列绑定成功後，打開mq可視化頁面，會看到如下圖所示：**
+**queue绑定成功後，打開mq可視化頁面，會看到如下圖所示：**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b0e9c238693d4e258557bc512bfccabf.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**寫好程式碼後，分別啟動生產方，消費方，即可看到調試成功資訊輸出：**
+**寫好程式碼後，分別啟動生產方，消費方，即可看到呼叫成功資訊輸出：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/6eacca917042472b90ab78ad7aaa0dd2.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
 **概念**：
 這種模型中 supplier 發送的消息所有 consumer 都可以消費。
 
-**案例：**
+**範例：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/8be81c5bec23424bb865f5b06f41128a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 **總結：workQueue模式和FanoutQueue模式區別：**
-**P代表 supplier ，C代表 consumer  X代表交換機，红色部分代表消息隊列**
+**P代表 supplier ，C代表 consumer  X代表exchanger，红色部分代表消息queue**
 workQueue:
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e96dd02ffd2046f7aaedd6e18c7a293a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 FanoutQUeue:
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/54a58bed69e8421aa74da4bff96a9d88.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-可以發現，FanoutQueue增加了一層交換機，可以多個隊列對應多個 consumer 。**而且比起WorkQueue，FanoutQueue supplier 是先發送到交換機; 而WorkQueue是直接發送到隊列**
+可以發現，FanoutQueue增加了一層exchanger，可以多個queue對應多個 consumer 。**而且比起WorkQueue，FanoutQueue supplier 是先發送到exchanger; 而WorkQueue是直接發送到queue**
 
 
 
@@ -640,39 +640,39 @@ FanoutQUeue:
 
 #### B. Direct Exchange
 
-**概念**：DirectExchange 會將接收到的消息根據規則路由到指定的queue，因此稱為路由模式，如下圖所示：
+**概念**：DirectExchange 會將接收到的消息根據規則router到指定的queue，因此稱為router模式，如下圖所示：
 
-**P代表 supplier ，C代表 consumer  X代表交換機，红色部分代表消息隊列**
+**P代表 supplier ，C代表 consumer  X代表exchanger，红色部分代表消息queue**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e0cafe9aa34947eaa6d7f7eb060f8912.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 * 每一個queue都會與Exchange設置一個BindingKey
 * 將來發布者發布消息時，會指定消息的RoutingKey
-* Exchange將消息路由到BingingKey與RoutingKey一致的隊列
+* Exchange將消息router到BingingKey與RoutingKey一致的queue
 * 實際應用時，可以绑定多個key。
 * **如果所有queue和所有Exchange绑定了一樣的key，那 supplier 所有符合key的消息 consumer 都會消費。如果這樣做，那DirectExchange就相當於FanoutExchange了（Direct可以模擬Fanout的全部功能）**
 
 
-案例如圖：
+範例如圖：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/eb2253f89e4e4e83b5319558b7158a32.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
 <font color="#35BDB2">** consumer 加入程式碼位置如下圖：**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b7ade1f045c14eb0b065972b4022f016.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2">**發送隊列加入程式碼位置如下圖：**</font>
+<font color="#35BDB2">**發送queue加入程式碼位置如下圖：**</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c8d114895fff469e80debf3d809f124d.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
 
-**這次的案例，我們用注解的方式聲明隊列和绑定交換機，之前Fanout的Demo是手寫了個配置類。** 直接在監聽隊列裡面聲明如下圖注解即可：
+**這次的範例，我們用注解的方式宣告queue和绑定exchanger，之前Fanout的Demo是手寫了個java config。** 直接在監聽queue裡面宣告如下圖注解即可：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/77bbef34813f4a3fa0d1b3e29314336c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 上圖的@QueueBinding點進去：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/6b05334f6484439dbf92e31e30a01d00.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-上面的key是個數組，可以寫多個key。
+上面的key是個陣列，可以寫多個key。
 
 寫完程式碼後啟動 consumer 的SpiringBoot主啟動類（報錯資訊不用管），然後進入rabbitMQ可視化控制台，出現下圖則說明配置成功：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/48670dfbf1464952b0733b59fd8da52b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-随後運行發送隊列的Test程式碼，打開 consumer 的控制台，出現如下圖輸出，則說明案例測試通過：
+随後運行發送queue的Test程式碼，打開 consumer 的控制台，出現如下圖輸出，則說明範例測試通過：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a42fceef10944bb89abb48f5b8339491.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -683,9 +683,9 @@ FanoutQUeue:
 
 （下圖來源於Java旅途 ，作者大尧）
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/8f10612746cc4e038190bd31b9d2186b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**案例：**
+**範例：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b037530521e148cca2e86391146e6b1a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2">**發送隊列、 consumer 的加入程式碼位置和上面的DirectExchange位置一致，就在DirectExchange程式碼下面。**</font>
+<font color="#35BDB2">**發送queue、 consumer 的加入程式碼位置和上面的DirectExchange位置一致，就在DirectExchange程式碼下面。**</font>
 
 寫完程式碼後啟動 consumer 的SpiringBoot主啟動類（報錯資訊不用管），然後進入rabbitMQ可視化控制台，出現下圖則說明配置成功：
 
@@ -693,17 +693,17 @@ FanoutQUeue:
 
 ### 10.3.4 消息轉換器
 
-**引入：**
+**import ：**
 
-在之前的案例中，我們發送到隊列的都是String類型，但是實際上，我們可以往消息隊列中扔進去任何類型。我們看下圖，convertAndSend這個方法，第三個參數也是Object。這說明可以發送任何類型給消息隊列:
+在之前的範例中，我們發送到queue的都是String類型，但是實際上，我們可以往消息queue中扔進去任何類型。我們看下圖，convertAndSend這個方法，第三個參數也是Object。這說明可以發送任何類型給消息queue:
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/8f395fc365ae4f6e834ff6ddea1ade73.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-**案例：**
-創建一個隊列，向該隊列扔一個任意物件（Object類型）
+**範例：**
+創建一個queue，向該queue扔一個任意物件（Object類型）
 
 
-<font color="#35BDB2">**創建隊列位置、發送隊列的加入程式碼位置如下圖**</font>
-創建隊列位置：
+<font color="#35BDB2">**創建queue位置、發送queue的加入程式碼位置如下圖**</font>
+創建queue位置：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e65474811ce54d09884d6b96fd825f4b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 發送：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a342bea892a849d48c387bfad6dfd2d4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -715,17 +715,17 @@ FanoutQUeue:
 **寫完程式碼後啟動發送的Test，去看RabbitMQ控制台，發現我們發過來的物件在内部被序列化（ObjectOutPutStream）了，如下圖所示：**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b4c457b8ac8d49c69c4da66b091f95ec.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-如果不知道什麼是ObjectOutPutStream可自行百度：
+如果不知道什麼是ObjectOutPutStream：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/0f19c50dd3f247719e50fca0eac5bbac.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
-<font color=red>上面說的ObjectOutPutStream這個序列化方式，缺點很多（性能差、長度太長、安全性有問題）。我們可以在這裡調優一下，推薦JSON的序列化方式。於是引出了這一節的正文：自定義消息轉換器(覆蓋了原有的Bean配置)：</font>
+<font color=red>上面說的ObjectOutPutStream這個序列化方式，缺點很多（效能差、長度太長、安全性有問題）。我們可以在這裡調優一下，推薦JSON的序列化方式。於是引出了這一節的正文：自定義消息轉換器(覆蓋了原有的Bean配置)：</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/0cb0a74cd3d64249bd7a5ac84b8b0d5e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2">**聲明配置位置如下圖**</font>
+<font color="#35BDB2">**宣告配置位置如下圖**</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/4ab28bea08e64515a64e934deb9a541a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**配置了消息轉換器轉換成json，然後重複之前的步骤，使用發送者發送一條消息到隊列，發送完成後打開RabbitMQ控制台，出現如下圖所示：**
+**配置了消息轉換器轉換成json，然後重複之前的步骤，使用發送者發送一條消息到queue，發送完成後打開RabbitMQ控制台，出現如下圖所示：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c4493d201a3a4912a925f9633be299ab.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 **該物件被成功序列為json格式了！！！！！**
 
@@ -757,7 +757,7 @@ ElasticSearch底層是Lucene（側面說明了ES和Hadoop千丝万缕的關係�
 
 推薦下面一篇文章：深入浅出大資料（From Zhihu）https://zhuanlan.zhihu.com/p/54994736
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/59c9cbf7ae554ac2954effb7ad645df6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-這個Lucene使用java寫成的，其實就是個jar包，我們引入之後就可以使用這個Lucene的API。而ES就是基於Lucene的二次開發，對其API進行進一步封裝：
+這個Lucene使用java寫成的，其實就是個jar，我們import 之後就可以使用這個Lucene的API。而ES就是基於Lucene的二次開發，對其API進行進一步封裝：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a7a5b6e56b784939804f056217b9eec9.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -805,7 +805,7 @@ ElasticSearch底層是Lucene（側面說明了ES和Hadoop千丝万缕的關係�
 >
 > --network es-net 將ES容器加入到剛剛創建的docker網络中
 >
-> -p 9200:9200 和 -p 9300:9300   是暴露的port，9200是用戶訪問的http協議port，9300是ES容器節點互連的port
+> -p 9200:9200 和 -p 9300:9300   是暴露的port，9200是使用者訪問的http協議port，9300是ES容器節點互連的port
 >
 > elasticsearch:7.12.1 鏡像名稱
 
@@ -999,14 +999,14 @@ POST /heima/_update/1
 ## 11.5 RestClient操作索引庫和文件
 
 * **概念**
-  ES官方為各種語言操作ES提供了客戶端API，用來操作ES。其實本质都是組裝ES語句，通過http請求發送給ES。 官方文件地址：[https://www.elastic.co/guide/en/elasticsearch/client/index.html](https://www.elastic.co/guide/en/elasticsearch/client/index.html)
+  ES官方為各種語言操作ES提供了client端API，用來操作ES。其實本质都是組裝ES語句，通過http請求發送給ES。 官方文件地址：[https://www.elastic.co/guide/en/elasticsearch/client/index.html](https://www.elastic.co/guide/en/elasticsearch/client/index.html)
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/118af580fdca4badb41f2baa6e9922aa.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
   可以看到有很多語言的版本。
 
-* **案例和程式碼位置**
+* **範例和程式碼位置**
   ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/d3e6458549904580962360da5219d77e.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-<font color="#35BDB2">**程式碼位置(大量程式碼寫在測試類中)，該案例需要導入資料庫，資料庫執行腳本位置同程式碼目錄：**</font>
+<font color="#35BDB2">**程式碼位置(大量程式碼寫在test class中)，該範例需要導入資料庫，資料庫執行腳本位置同程式碼目錄：**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a4d03333157b4cb1a707b0c89ff4c96f.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 * **編寫DSL語句，創建索引庫（相當與MySQL中建表）**
@@ -1086,7 +1086,7 @@ PUT /hotel
 
 ## 11.6 DSL查詢語法
 
-<font color="red">先給出幫助文件，幫助文件永远是學東西最准確的方式：</font>
+<font color="red">先給出幫助文件，幫助文件永遠是學東西最准確的方式：</font>
 [https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html](https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html)
 
 * **快速入門---簡單查詢：**
@@ -1137,7 +1137,7 @@ GET /hotel/_search
   }
 }
 
-# 精確查詢(范围range)
+# 精確查詢(範围range)
 GET /hotel/_search
 {
   "query": {
@@ -1216,9 +1216,9 @@ GET /hotel/_search
 **Boolean Query**
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b2dde62523f34b37be5920e74ab2a2c4.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-**注意，算分條件越多，性能就會越差。所以能使用filter的就別使用must，能不算分就不算分**
+**注意，算分條件越多，效能就會越差。所以能使用filter的就別使用must，能不算分就不算分**
 
-**案例：搜索名字包含“如家”，價格不高於400，在坐標31.21，121.5周围10km范围内的酒店**
+**範例：搜索名字包含“如家”，價格不高於400，在坐標31.21，121.5周围10km範围内的酒店**
 參考答案：
 
 ```json
@@ -1260,7 +1260,7 @@ GET /hotel/_search
 
 <font color=green>**A.排序**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/1e52d0f9dcc94dec877621b5db6caf2f.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-案例：
+範例：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e4d99d436623458782a3068a1cd48fe9.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 查詢語句實現：
 
@@ -1285,7 +1285,7 @@ GET /hotel/_search
 
 
 
-案例2：
+範例2：
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/4283212e06bd475e875b9066a0776df7.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
@@ -1390,7 +1390,7 @@ GET /hotel/_search
 這裡只有一個注意點：高亮結果的解析，比較麻烦。程式碼要配合下圖理解：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/9d85524ad3d646d7949f87ec57e25f7c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-## 11.8 ES综合案例：黑馬旅游
+## 11.8 ES综合範例：黑馬旅游
 
 <font color="#35BDB2">**程式碼位置：就是11.7那個類，直接啟動SpringBoot主啟動類，然後訪問localhost:8089即可訪問到前端頁面**</font>
 
@@ -1467,7 +1467,7 @@ GET hotel/_search
 }
 ```
 
-**限定聚合范围：**
+**限定聚合範围：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/abceccff540b4672b25484a6b3347dcc.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 <font color=green>**2、Metrics聚合**</font>
@@ -1510,9 +1510,9 @@ Java Restclient對應Json的圖例：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/e5a68600a1d047768461802ee34403f6.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 Java程式碼對應結果解析的圖例：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/cad994cb410d48e39c2170c01c3dd571.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color=green>**3、聚合案例：**</font>
+<font color=green>**3、聚合範例：**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/1b87f0c83b954fbda7c515c01156e5b1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2"> **案例位置同上面的 ES综合案例：黑馬旅游**</font>
+<font color="#35BDB2"> **範例位置同上面的 ES综合範例：黑馬旅游**</font>
 
 
 
@@ -1571,11 +1571,11 @@ GET /test/_search
 
 **總結：**
 自動補全對字串的要求：
-類型是completion類型；字串值是多詞條的數組。
+類型是completion類型；字串值是多詞條的陣列。
 
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/d8bd52cfcbb7404b9bcaab2cca653b4a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color = green>**案例：實現hotel索引庫的自動補全、拼音搜索功能：**</font>
+<font color = green>**範例：實現hotel索引庫的自動補全、拼音搜索功能：**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/08119d87dd8f4aa9b2df738ec5a1e977.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 找到下圖位置，複製粘贴進kibana控制台並且執行（這一步是重建酒店資料索引庫，在此之前要刪掉原有的酒店資料索引庫）：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/081a98285e09459ea27608dd6825ee8f.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
@@ -1595,7 +1595,7 @@ GET /test/_search
 <font color="#35BDB2"> **使用Java Restclient實現上面自動補全方式，位置如下：**</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/bbfff38280db4fcdb8c152205751b379.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-案例效果：
+範例效果：
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/dd6532ecf21b49869765b150728469fe.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
@@ -1603,7 +1603,7 @@ GET /test/_search
 
 <font color=green>概念</font>
 
-ES中的酒店資料來自於MySQL索引庫，因此mysql資料發生改变時，ES的值也會跟著改变，這個就是ES和MySQL的資料同步。
+ES中的酒店資料來自於MySQL索引庫，因此mysql資料發生改變時，ES的值也會跟著改變，這個就是ES和MySQL的資料同步。
 
 思考：在微服務中，操作MySQL的業務和操作ES的業務可能在不同的微服務上，這種情况應該怎麼實現資料同步呢？
 
@@ -1612,20 +1612,20 @@ ES中的酒店資料來自於MySQL索引庫，因此mysql資料發生改变時�
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/a9ca39bfe3a94e05a9f7cf9da21d3f88.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/5097975d4dda4a899b54c023afc41d5c.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color=green>**案例：利用MQ實現mysql與es的資料同步**</font>
+<font color=green>**範例：利用MQ實現mysql與es的資料同步**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b8da451311bb4af2ae03a34e535d5255.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 **思路：**
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/c194c76f31e341a8abcac23a22c59cd8.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
-<font color="#35BDB2"> **資料同步案例後台管理頁面程式碼位置如下圖（資料庫就用之前的ES综合案例：黑馬旅游）：**</font>
+<font color="#35BDB2"> **資料同步範例後台管理頁面程式碼位置如下圖（資料庫就用之前的ES综合範例：黑馬旅游）：**</font>
 
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/51fe4795bc8744879db54376714ff9a5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
-<font color="#35BDB2"> **資料同步案例前端顯示程式碼就是之前的ES综合案例：黑馬旅游。前後端的微服務是分離的，port號也不同。**</font>
+<font color="#35BDB2"> **資料同步範例前端顯示程式碼就是之前的ES综合範例：黑馬旅游。前後端的微服務是分離的，port號也不同。**</font>
 **實際上，這個專案hotel-admin專案相當於 supplier ，负责發送資料庫增刪改消息；hotel-demo(之前的黑馬旅游前端專案)相當於 consumer ，负责監聽消息並更新ES中的資料。**
 
 **這樣就實現了在微服務中，操作MySQL的業務和操作ES的業務在不同的微服務上的跨服務資料同步**
 
-用心跟著程式碼走，這個案例是完全可以做完並實現**影片全部功能**的，沒有一句废话多余。
+用心跟著程式碼走，這個範例是完全可以做完並實現**影片全部功能**的，沒有一句废话多余。
 
 ## 11.12 搭建高可用ES集群
 
@@ -1644,7 +1644,7 @@ ES中的酒店資料來自於MySQL索引庫，因此mysql資料發生改变時�
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b1c04e6322ef42b8be7ceb00a640833b.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 
 
-<font color=green>**集群分布式存储和分布式查詢**</font>
+<font color=green>**集群分布式存儲和分布式查詢**</font>
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/d49d5cf987a24abb92c9cc29fa521064.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/b11c659312e64c6ab9861ac35224d459.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)
 ![在這裡插入圖片描述](https://img-blog.csdnimg.cn/33a84c29c3f0493cbb9b31cf332790c8.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAQOWkp-WQiQ==,size_20,color_FFFFFF,t_70,g_se,x_16)

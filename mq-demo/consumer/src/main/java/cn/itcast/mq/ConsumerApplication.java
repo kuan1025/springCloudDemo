@@ -12,14 +12,9 @@ public class ConsumerApplication {
         SpringApplication.run(ConsumerApplication.class, args);
     }
 
-    //这代码是从生产者主启动类copy过来的
-    //为什么在主启动类里声明该配置？因为主启动类也是配置类：
-    //一个@SpringBootApplication就包含了以下三个注解：
-    //@Configuration(@SpringBootConfiguration实质就是一个@Configuration）
-    //@EnableAutoConfiguration
-    //@ComponentScan
+    // SpringAMQP 用messageConverter 做序列化和反序列化 用json工具改變預設的序列化方式
     @Bean
     public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();  //用json工具转json
+        return new Jackson2JsonMessageConverter();  //用json工具轉json
     }
 }

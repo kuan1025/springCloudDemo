@@ -6,8 +6,8 @@ spring:
     host: 127.0.0.1
     port: 5672
     username: root
-    password: root
+    password: password
     virtual-host: /
     listener:
       simple:
-        prefatch: 1
+        prefetch: 1 # 只能預先取一個

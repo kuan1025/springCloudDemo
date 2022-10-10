@@ -12,15 +12,9 @@ public class PublisherApplication {
         SpringApplication.run(PublisherApplication.class);
     }
 
-    //为什么要在发送者方声明配置？因为发消息的序列化是生产者行为
-    //为什么在主启动类里声明该配置？因为主启动类也是配置类：
-        //一个@SpringBootApplication就包含了以下三个注解：
-        //@Configuration(@SpringBootConfiguration实质就是一个@Configuration）
-        //@EnableAutoConfiguration
-        //@ComponentScan
     @Bean
     public MessageConverter messageConverter(){
-        return new Jackson2JsonMessageConverter();  //用json工具转json
+        return new Jackson2JsonMessageConverter();  //用json工具轉json
     }
 
 }

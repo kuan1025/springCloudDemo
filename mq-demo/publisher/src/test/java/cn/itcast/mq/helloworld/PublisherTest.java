@@ -4,9 +4,11 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.junit.Test;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
 
 public class PublisherTest {
     @Test
